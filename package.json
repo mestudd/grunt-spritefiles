@@ -1,0 +1,33 @@
+{
+  "name": "grunt-sprites",
+  "version": "0.0.1",
+  "description": "Grunt library for using spritesmith",
+  "main": "tasks/grunt-sprites.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "keywords": [
+    "grunt",
+    "gruntplugin",
+    "sprite",
+    "spritesheet",
+    "css",
+    "spritesmith"
+  ],
+  "author": {
+    "name": "Malcolm Studd",
+    "email": "mstudd@recognia.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "spritesmith": "~0.7.0",
+    "json2css": "~1.2.0",
+    "underscore": "~1.4.2",
+    "url2": "*"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.1.2",
+    "grunt-contrib-clean": "~0.4.1"
+  }
+}
