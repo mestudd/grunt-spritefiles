@@ -11,7 +11,7 @@ module.exports = function (grunt) {
 
 		// Configuration to be run (and then tested).
 		sprite: {
-			options: { imageFormat: 'png' },
+			options: { imgOpts: { format: 'png' } },
 			empty: {
 				files: { 'tmp/idontexist.png': 'test/fixtures/idontexist.png' }
 			},
@@ -20,7 +20,10 @@ module.exports = function (grunt) {
 				dest: 'tmp/compact.png'
 			},
 			filesObject: {
-				files: { 'tmp/filesObject.png': ['test/fixtures/sprite1.png', 'test/fixtures/sprite2.jpg'] }
+				files: {
+					'tmp/filesObject1.png': ['test/fixtures/sprite1.png', 'test/fixtures/sprite2.jpg'],
+					'tmp/filesObject2.png': ['test/fixtures/sprite1.*'],
+				}
 			},
 			filesArray: {
 				files: [
@@ -29,8 +32,8 @@ module.exports = function (grunt) {
 					{ dest: 'tmp/array3.png', src: ['test/fixtures/sprite1.png', 'test/fixtures/sprite3.png'] }
 				]
 			},
-			filesObjectOptions: {
-				options: { imageFormat: 'jpg' },
+			filesOptions: {
+				options: { imgOpts: { format: 'jpg' } },
 				files: { 'tmp/filesOptions': ['test/fixtures/sprite1.png', 'test/fixtures/sprite2.jpg'] }
 			}
 		},

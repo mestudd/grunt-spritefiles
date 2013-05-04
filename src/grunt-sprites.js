@@ -60,7 +60,7 @@ module.exports = function (grunt) {
 
 		this.files.forEach(function(sprite) {
 			var exportOpts = sprite.imgOpts || {};
-			_.defaults(exportOpts, data.imgOpts);
+			_.defaults(exportOpts, options.imgOpts);
 			_.defaults(exportOpts, {'format': imgFormats.get(sprite.dest) || 'png'});
 
 			var spritesmithParams = {
