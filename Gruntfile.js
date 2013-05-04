@@ -1,3 +1,5 @@
+var sprite = require('./src/grunt-sprites.js');
+
 module.exports = function (grunt) {
 	grunt.initConfig({
 		lint: {
@@ -35,6 +37,13 @@ module.exports = function (grunt) {
 			filesOptions: {
 				options: { imgOpts: { format: 'jpg' } },
 				files: { 'tmp/filesOptions': ['test/fixtures/sprite1.png', 'test/fixtures/sprite2.jpg'] }
+			},
+			cssDest: { // FIXME maybe incorporate into filesArray?
+				files: [{
+					dest: 'tmp/css.png',
+					processor: sprite.css('tmp/css.json'),
+					src: ['test/fixtures/sprite1.png', 'test/fixtures/sprite2.jpg']
+				}]
 			}
 		},
 

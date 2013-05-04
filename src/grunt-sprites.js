@@ -59,6 +59,8 @@ module.exports = function (grunt) {
 			spriteCount = 0;
 
 		this.files.forEach(function(sprite) {
+// has everyting!
+grunt.verbose.writeflags(sprite, 'Sprite');
 			var exportOpts = sprite.imgOpts || {};
 			_.defaults(exportOpts, options.imgOpts);
 			_.defaults(exportOpts, {'format': imgFormats.get(sprite.dest) || 'png'});
@@ -84,6 +86,10 @@ module.exports = function (grunt) {
 				// Otherwise, print a success message.
 				grunt.log.writeln('Files "' + sprite.dest + '" created.');
 
+				if (typeof sprite.processor === 'function') {
+					sprite.processor(grunt, data, sprite, result);
+				}
+
 				// Callback
 				spriteCount++;
 				if (spriteCount == that.files.length) {
@@ -95,4 +101,10 @@ module.exports = function (grunt) {
 
 	// Export the SpriteMaker function
 	grunt.registerMultiTask('sprite', 'Spritesheet making utility', SpriteMaker);
+};
+
+module.exports.css = function(file) {
+	return function(grunt, data, sprite, result) {
+		grunt.verbose.writeflags(result.coordinates, sprite.dest + ' coordinates');
+	};
 };

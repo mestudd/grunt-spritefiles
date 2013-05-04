@@ -46,4 +46,5 @@ exports.sprites = {
 
 		test.done();
 	}
+// FIXME add CSS/post-processing tests
 };
