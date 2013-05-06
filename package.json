@@ -18,6 +18,10 @@
     "name": "Malcolm Studd",
     "email": "mstudd@recognia.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mestudd/grunt-spritefiles.git"
+  },
   "license": "MIT",
   "dependencies": {
     "spritesmith": "~0.7.0",
