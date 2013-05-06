@@ -1,7 +1,9 @@
 var spritesmith = require('spritesmith'),
+    json2css = require('json2css'),
 	_ = require('underscore'),
 	fs = require('fs'),
-	path = require('path');
+	path = require('path'),
+	url = require('url2');
 
 function ExtFormat() {
   this.formatObj = {};
@@ -59,8 +61,6 @@ module.exports = function (grunt) {
 			spriteCount = 0;
 
 		this.files.forEach(function(sprite) {
-// has everyting!
-grunt.verbose.writeflags(sprite, 'Sprite');
 			var exportOpts = sprite.imgOpts || {};
 			_.defaults(exportOpts, options.imgOpts);
 			_.defaults(exportOpts, {'format': imgFormats.get(sprite.dest) || 'png'});
@@ -84,8 +84,9 @@ grunt.verbose.writeflags(sprite, 'Sprite');
 				fs.writeFileSync(sprite.dest, result.image, 'binary');
 
 				// Otherwise, print a success message.
-				grunt.log.writeln('Files "' + sprite.dest + '" created.');
+				grunt.log.writeln('Sprite "' + sprite.dest + '" created.');
 
+// FIXME support processor in any config location
 				if (typeof sprite.processor === 'function') {
 					sprite.processor(grunt, data, sprite, result);
 				}
@@ -103,8 +104,48 @@ grunt.verbose.writeflags(sprite, 'Sprite');
 	grunt.registerMultiTask('sprite', 'Spritesheet making utility', SpriteMaker);
 };
 
-module.exports.css = function(file) {
+module.exports.cssFile = function(cssFile, opts) {
+	var options = opts || {};
 	return function(grunt, data, sprite, result) {
-		grunt.verbose.writeflags(result.coordinates, sprite.dest + ' coordinates');
+
+		// Generate a listing of CSS variables
+		var coordinates = result.coordinates,
+			cleanCoords = {};
+
+		// Clean up the file name of the file
+		Object.getOwnPropertyNames(coordinates).forEach(function (file) {
+			// Extract the image name (exlcuding extension)
+			var fullname = path.basename(file),
+					nameParts = fullname.split('.');
+
+			// If there is are more than 2 parts, pop the last one
+			if (nameParts.length >= 2) {
+				nameParts.pop();
+			}
+
+			// Extract out our name
+			var name = nameParts.join('.'),
+					coords = coordinates[file];
+
+			// Save the cleaned name and coordinates
+			cleanCoords[name] = coords;
+		});
+
+		// Render the variables via json2css
+		var cssFormat = options.format || cssFormats.get(cssFile) || 'json',
+				spritePath = options.imgPath || url.relative(cssFile, sprite.dest),
+				formatOpts = {
+					'spritePath': spritePath
+				},
+				cssStr = json2css(cleanCoords, {'format': cssFormat, 'formatOpts': formatOpts});
+
+		// Write it out to the CSS file
+		var cssDir = path.dirname(cssFile);
+		grunt.file.mkdir(cssDir);
+		fs.writeFileSync(cssFile, cssStr, 'utf8');
+
+		grunt.log.writeln('CSS "' + cssFile + '" created.');
+
+		return true;
 	};
 };

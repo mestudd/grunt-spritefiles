@@ -38,12 +38,24 @@ module.exports = function (grunt) {
 				options: { imgOpts: { format: 'jpg' } },
 				files: { 'tmp/filesOptions': ['test/fixtures/sprite1.png', 'test/fixtures/sprite2.jpg'] }
 			},
-			cssDest: { // FIXME maybe incorporate into filesArray?
-				files: [{
-					dest: 'tmp/css.png',
-					processor: sprite.css('tmp/css.json'),
-					src: ['test/fixtures/sprite1.png', 'test/fixtures/sprite2.jpg']
-				}]
+			processor: {
+				files: [
+					{
+						dest: 'tmp/json.png',
+						processor: sprite.cssFile('tmp/css.json'),
+						src: ['test/fixtures/sprite1.png', 'test/fixtures/sprite2.jpg']
+					},
+					{
+						dest: 'tmp/stylus.png',
+						processor: sprite.cssFile('tmp/css.style', { format: 'stylus', imgPath: '/other/stylus.png' }),
+						src: ['test/fixtures/sprite1.png', 'test/fixtures/sprite2.jpg']
+					},
+					{
+						dest: 'tmp/less.png',
+						processor: sprite.cssFile('tmp/css.less'),
+						src: ['test/fixtures/sprite1.png', 'test/fixtures/sprite2.jpg']
+					}
+				]
 			}
 		},
 

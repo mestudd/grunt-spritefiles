@@ -45,6 +45,22 @@ exports.sprites = {
 		test.equals('JFIF', image.substring(6, 10), 'sprite image is overridden JPG');
 
 		test.done();
+	},
+	processor: function(test) {
+		test.expect(3);
+
+		var expected = grunt.file.read('test/expected/css.json');
+		var got = grunt.file.read('tmp/css.json');
+		test.equals(expected, got, 'CSS file correct');
+
+		expected = grunt.file.read('test/expected/css.style');
+		got = grunt.file.read('tmp/css.style');
+		test.equals(expected, got, 'Stylus file correct (with processor options)');
+
+		expected = grunt.file.read('test/expected/css.less');
+		got = grunt.file.read('tmp/css.less');
+		test.equals(expected, got, 'LESS file correct');
+
+		test.done();
 	}
-// FIXME add CSS/post-processing tests
 };
