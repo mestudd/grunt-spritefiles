@@ -1,4 +1,4 @@
-grunt-spritesmith
+grunt-spritefiles
 =================
 Grunt library for using [spritesmith](https://github.com/Ensighten/spritesmith), a spritesheet and CSS pre-processor utility.
 
@@ -14,79 +14,82 @@ When you combine all three of these, you get a grunt plugin that makes maintaini
 
 Getting Started
 ---------------
-Install this grunt plugin next to your project's [grunt.js gruntfile](https://github.com/gruntjs/grunt/blob/master/docs/getting_started.md) with: `npm install grunt-spritesmith`
+Install this grunt plugin next to your project's [grunt.js gruntfile](https://github.com/gruntjs/grunt/blob/master/docs/getting_started.md) with: `npm install grunt-spritefiles`
 
 Then add this line to your project's `grunt.js` gruntfile:
 
 ```javascript
-grunt.loadNpmTasks('grunt-spritesmith');
+grunt.loadNpmTasks('grunt-spritefiles');
 ```
 
 Requirements
 ------------
-Spritesmith supports multiple sprite engines however all of the current engines require external software to be installed.
+Spritesmith supports multiple sprite engines however all of the current engines require external software to be installed. See [spritesmith](https://github.com/Ensighten/spritesmith) for instructions.
 
-As a result, you must either have [PhantomJS][phantomjs], [Cairo](http://cairographics.org/), or [Graphics Magick](http://www.graphicsmagick.org/) installed for Spritesmith to run properly.
+Why Use This Task
+-----------------
+Short answer: you probably don't. This task is mostly a copy of [grunt-spritesmith](https://github.com/Ensighten/grunt-spritesmith), and you probably want to use it instead.
 
-[phantomjs]: http://phantomjs.org/
-
-### PhantomJS
-This depends on having `phantomjs` installed on your machine. For installation instructions, visit [the website][phantomjs]. This module has been tested against `1.9.0`.
-
-### Cairo (node-canvas)
-Due to dependance on [node-canvas](https://github.com/learnboost/node-canvas), you must install [Cairo](http://cairographics.org/).
-
-Instructions on how to do this are provided in the [node-canvas wiki](https://github.com/LearnBoost/node-canvas/wiki/_pages).
-
-Additionally, you will need to install [node-gyp](https://github.com/TooTallNate/node-gyp/)
-```shell
-sudo npm install -g node-gyp
-```
-
-### Graphics Magick (gm)
-The alternative engine is [gm](https://github.com/aheckmann/gm) which runs on top of [Graphics Magick](http://www.graphicsmagick.org/).
-
-I have found it is best to install from the site rather than through a package manager (e.g. `apt-get`) to get the latest as well as without transparency issues.
-
-This module has been developed and tested against `1.3.17`.
+This module was written for a large, complex, existing product that needed to programatically generate sprite-creation tasks and run custom processing for sprites without changing old workflow. It uses the typical grunt src/dest/files attributes to generate multiple sprites per task. The spritesmith results are passed to a function to allow any customised processing.
 
 Usage
 -----
 ```js
+// Load package if using extra functions from it
+var sprite = require('./src/grunt-spritefiles.js');
+
+// Provide a custom processing function
+var customSprites = function(grunt, that, sprite, result) {
+  // grunt: Grunt object, as available to task
+  // that: this object from task
+  // sprite: grunt files object for sprite
+  // result: spritesmith result object
+  grunt.verbose.writeflags(sprite, 'Files');
+  grunt.verbose.writeflags(result.coordinates, 'Sprite coordinates');
+};
+
 grunt.initConfig({
   'sprite': {
     'all': {
-      // Sprite files to read in
-      'src': ['public/images/sprites/*.png'],
+      // Uses standard grunt src/dest/files attributes for building sprite image
+      'files': [
+        { dest: 'images/sprite.png', src: ['images/sprites/*.png'] },
+        { dest: 'images/sprite.png', src: ['images/sprites/*.png'],
+          // Processor function to run for each sprite
+          processor: sprite.cssFile( // write CSS file (matches grunt-spritesmith)
+            'css/sprite.json',  // css file location
+            {
+              // OPTIONAL: Specify CSS format (inferred from file's extension by default)
+                  // (stylus, scss, sass, less, json)
+              'cssFormat': 'json',
 
-      // Location to output spritesheet
-      'destImg': 'public/images/sprite.png',
+              // OPTIONAL: Manual override for imgPath specified in CSS
+              'imgPath': '../sprite.png'
+            })
+        },
+        'options': {
+          // OPTIONAL: Specify algorithm (top-down, left-right, diagonal [\ format],
+              // alt-diagonal [/ format], binary-tree [best packing])
+          'algorithm': 'alt-diagonal',
 
-      // Stylus with variables under sprite names
-      'destCSS': 'public/css/sprite_positions.styl',
+          // OPTIONAL: Specify engine (auto, canvas, gm)
+          'engine': 'canvas',
 
-      // OPTIONAL: Manual override for imgPath specified in CSS
-      'imgPath': '../sprite.png',
+          // OPTIONAL: Specify img options
+          'imgOpts': {
+             // Format of the image (inferred from destImg' extension by default) (jpg, png)
+             'format': 'png',
 
-      // OPTIONAL: Specify algorithm (top-down, left-right, diagonal [\ format],
-          // alt-diagonal [/ format], binary-tree [best packing])
-      'algorithm': 'alt-diagonal',
-
-      // OPTIONAL: Specify engine (auto, canvas, gm)
-      'engine': 'canvas',
-
-      // OPTIONAL: Specify CSS format (inferred from destCSS' extension by default)
-          // (stylus, scss, sass, less, json)
-      'cssFormat': 'json',
-
-      // OPTIONAL: Specify img options
-      'imgOpts': {
-         // Format of the image (inferred from destImg' extension by default) (jpg, png)
-         'format': 'png',
-
-         // Quality of image (gm only)
-         'quality': 90
-      }
+             // Quality of image (gm only)
+             'quality': 90
+          }
+        }
+      ]
+    },
+    'all': {
+      dest: 'images/custom.png',
+      src: ['images/*.gif'],
+      processor: customSprites
     }
   }
 });
@@ -108,4 +111,5 @@ CSS formats are maintained via [twolfson/json2css](https://github.com/twolfson/j
 License
 -------
 Copyright (c) 2012 Ensighten
+Copyright (c) 2013 Recognia Inc
 Licensed under the MIT license.

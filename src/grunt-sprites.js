@@ -106,7 +106,7 @@ module.exports = function (grunt) {
 
 module.exports.cssFile = function(cssFile, opts) {
 	var options = opts || {};
-	return function(grunt, data, sprite, result) {
+	return function(grunt, that, sprite, result) {
 
 		// Generate a listing of CSS variables
 		var coordinates = result.coordinates,
