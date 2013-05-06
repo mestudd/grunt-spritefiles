@@ -1,8 +1,8 @@
 {
-  "name": "grunt-sprites",
+  "name": "grunt-spritefiles",
   "version": "0.0.1",
-  "description": "Grunt library for using spritesmith",
-  "main": "tasks/grunt-sprites.js",
+  "description": "Grunt task for creating image spritesheets",
+  "main": "tasks/grunt-spritefiles.js",
   "scripts": {
     "test": "grunt test"
   },

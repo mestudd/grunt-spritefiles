@@ -1,4 +1,4 @@
-var sprite = require('./src/grunt-sprites.js');
+var sprite = require('./src/grunt-spritefiles.js');
 
 module.exports = function (grunt) {
 	grunt.initConfig({
