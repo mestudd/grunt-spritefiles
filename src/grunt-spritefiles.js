@@ -53,15 +53,13 @@ module.exports = function (grunt) {
 				algorithm: 'top-down',
 			});
 
-		grunt.verbose.writeflags(options, 'Options');
-		grunt.verbose.writeflags(data, 'Data');
-
-		// Create an async callback
-		var cb = this.async(),
-			spriteCount = 0;
-
-		this.files.forEach(function(sprite) {
-			var exportOpts = sprite.imgOpts || {};
+		// Create an async grunt callback
+		var done = this.async();
+		// and a process function so we can build only one sprite at a time
+		// (otherwise we open too many files)
+		var processSprite = function(files, i) {
+			var sprite = files[i],
+				exportOpts = sprite.imgOpts || {};
 			_.defaults(exportOpts, options.imgOpts);
 			_.defaults(exportOpts, {'format': imgFormats.get(sprite.dest) || 'png'});
 
@@ -75,7 +73,7 @@ module.exports = function (grunt) {
 				// If an error occurred, callback with it
 				if (err) {
 					grunt.fatal(err);
-					return cb(err);
+					return done(err);
 				}
 
 				// Otherwise, write out the result to destImg
@@ -91,13 +89,17 @@ module.exports = function (grunt) {
 					sprite.processor(grunt, data, sprite, result);
 				}
 
-				// Callback
-				spriteCount++;
-				if (spriteCount == that.files.length) {
-					cb(true);
+				// Callback next sprite or done
+				i++;
+				if (i < files.length) {
+					processSprite(files, i);
+				} else {
+					done(true);
 				}
 			});
-		});
+		};
+
+		processSprite(this.files, 0);
 	}
 
 	// Export the SpriteMaker function
