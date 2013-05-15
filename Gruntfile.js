@@ -14,6 +14,9 @@ module.exports = function (grunt) {
 		// Configuration to be run (and then tested).
 		sprite: {
 			options: { imgOpts: { format: 'png' } },
+			degenerate: {
+				files: []
+			},
 			empty: {
 				files: { 'tmp/idontexist.png': 'test/fixtures/idontexist.png' }
 			},

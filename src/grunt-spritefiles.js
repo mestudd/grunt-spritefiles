@@ -58,6 +58,10 @@ module.exports = function (grunt) {
 		// and a process function so we can build only one sprite at a time
 		// (otherwise we open too many files)
 		var processSprite = function(files, i) {
+			if (i >= files.length) {
+				done(true);
+				return;
+			}
 			var sprite = files[i],
 				exportOpts = sprite.imgOpts || {};
 			_.defaults(exportOpts, options.imgOpts);
@@ -89,13 +93,9 @@ module.exports = function (grunt) {
 					sprite.processor(grunt, data, sprite, result);
 				}
 
-				// Callback next sprite or done
+				// Callback next sprite
 				i++;
-				if (i < files.length) {
-					processSprite(files, i);
-				} else {
-					done(true);
-				}
+				processSprite(files, i);
 			});
 		};
 
