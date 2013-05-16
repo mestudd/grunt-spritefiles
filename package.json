@@ -1,6 +1,6 @@
 {
   "name": "grunt-spritefiles",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Grunt task for creating image spritesheets",
   "main": "tasks/grunt-spritefiles.js",
   "scripts": {
@@ -33,5 +33,8 @@
     "grunt": "~0.4.0",
     "grunt-contrib-nodeunit": "~0.1.2",
     "grunt-contrib-clean": "~0.4.1"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.0"
   }
 }
