@@ -53,8 +53,6 @@ module.exports = function (grunt) {
 				algorithm: 'top-down',
 			});
 
-		// Create an async grunt callback
-		var done = this.async();
 		// and a process function so we can build only one sprite at a time
 		// (otherwise we open too many files)
 		var processSprite = function(files, i) {
@@ -99,7 +97,13 @@ module.exports = function (grunt) {
 			});
 		};
 
-		processSprite(this.files, 0);
+		if (this.files) {
+			// Create an async grunt callback
+			var done = this.async();
+			processSprite(this.files, 0);
+		} else {
+			grunt.log.log('Task does not have any files');
+		}
 	}
 
 	// Export the SpriteMaker function
