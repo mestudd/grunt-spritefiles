@@ -28,7 +28,8 @@ Spritesmith supports multiple sprite engines however all of the current engines 
 
 Why Use This Task
 -----------------
-Short answer: you probably don't. This task is mostly a copy of [grunt-spritesmith](https://github.com/Ensighten/grunt-spritesmith), and you probably want to use it instead.
+
+You need to generate multiple sprite images and run custom processing over the results. If this isn't true, you probably want a simpler, more maintained plugin like [grunt-spritesmith](https://github.com/Ensighten/grunt-spritesmith), the basis for this plugin. That being said, this plugin works and I'm happy to receive patches if it doesn't.
 
 This module was written for a large, complex, existing product that needed to programatically generate sprite-creation tasks and run custom processing for sprites without changing old workflow. It uses the typical grunt src/dest/files attributes to generate multiple sprites per task. The spritesmith results are passed to a function to allow any customised processing.
 
