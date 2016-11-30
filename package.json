@@ -1,6 +1,6 @@
 {
   "name": "grunt-spritefiles",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Grunt task for creating multiple image spritesheets with custom processing callbacks",
   "main": "tasks/grunt-spritefiles.js",
   "scripts": {
