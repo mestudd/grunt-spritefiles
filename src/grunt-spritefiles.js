@@ -49,7 +49,7 @@ module.exports = function (grunt) {
 		var data = this.data,
 			that = this,
 			options = this.options({
-				engine: 'auto',
+				engine: 'pixelsmith',
 				algorithm: 'top-down',
 			});
 

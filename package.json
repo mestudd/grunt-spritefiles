@@ -24,15 +24,15 @@
   },
   "license": "MIT",
   "dependencies": {
-    "spritesmith": "~0.7.0",
+    "spritesmith": "~1.5.0",
     "json2css": "~1.2.0",
     "underscore": "~1.4.2",
     "url2": "*"
   },
   "devDependencies": {
-    "grunt": "~0.4.0",
-    "grunt-contrib-nodeunit": "~0.1.2",
-    "grunt-contrib-clean": "~0.4.1"
+    "grunt": "~1.0.0",
+    "grunt-contrib-nodeunit": "~1.0.0",
+    "grunt-contrib-clean": "~1.0.0"
   },
   "peerDependencies": {
     "grunt": ">=0.4.0"
